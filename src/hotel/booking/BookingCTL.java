@@ -137,7 +137,22 @@ public class BookingCTL {
 
 
 	public void creditDetailsEntered(CreditCardType type, int number, int ccv) {
-		// TODO Auto-generated method stub
+		CreditCard creditCard = new CreditCard(type , number, ccv);
+		CreditAuthorizer creditAuthorizer = new CreditAuthorizer();
+		boolean approved = creditAuthorizer.authorize(creditCard, cost);
+		if (approved){
+            long confirmationNumber = hotel.book(room, guest, arrivalDate, stayLength, occupantNumber, creditCard);
+            String roomDescription = room.getDescription();
+            int roomNumber = room.getId();
+            String vendor = creditCard.getVendor();
+            int cardNumber = creditCard.getNumber();
+            String guestName = guest.getName();
+            bookingUI.displayConfirmedBooking(roomDescription,roomNumber,arrivalDate,
+                    stayLength, guestName, vendor, cardNumber, cost, confirmationNumber);
+            bookingUI.setState(BookingUI.State.COMPLETED);
+        } else {
+            bookingUI.displayMessage("Credit Not Authorized");
+        }
 	}
 
 
