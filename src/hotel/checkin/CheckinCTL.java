@@ -41,7 +41,7 @@ public class CheckinCTL {
 		
 		String message = null;
 		if (booking == null) {
-			message = String.format("No booking for confirmation number %d found", confirmationNumber);
+			message = String.format("No hotel.booking for confirmation number %d found", confirmationNumber);
 			checkInUI.displayMessage(message);	
 			//cancel();
 		}

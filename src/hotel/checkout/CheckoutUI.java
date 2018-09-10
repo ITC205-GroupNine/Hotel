@@ -75,24 +75,24 @@ public class CheckoutUI {
 		CreditCardType creditCardType = null;
 		int cardNumber = 0;
 		int ccv = 0;
-		IOUtils.outputln("\nEnter credit card details");
+		IOUtils.outputln("\nEnter hotel.credit card details");
 		
 		boolean completed = false;
 		while (!completed) {			
-			//enter credit card type
+			//enter hotel.credit card type
 			try {
-				creditCardType = IOUtils.getValidCreditType("Enter credit card type");
+				creditCardType = IOUtils.getValidCreditType("Enter hotel.credit card type");
 			}
 			catch (NullInputException e) {
-				IOUtils.outputln("CheckoutUI: User cancelled at enter credit card type");
+				IOUtils.outputln("CheckoutUI: User cancelled at enter hotel.credit card type");
 				throw new CancelException();
 			}			
-			//enter credit card number
+			//enter hotel.credit card number
 			try {
-				cardNumber = IOUtils.getValidPositiveInt("Enter credit card number: ");
+				cardNumber = IOUtils.getValidPositiveInt("Enter hotel.credit card number: ");
 			}
 			catch (NullInputException e) {
-				IOUtils.outputln("CheckoutUI: User reset at input credit card number");
+				IOUtils.outputln("CheckoutUI: User reset at input hotel.credit card number");
 				continue;
 			}	
 			//enter ccv

@@ -83,12 +83,12 @@ public class RecordServiceUI {
 		
 		boolean completed = false;
 		while (!completed) {			
-			//enter service type
+			//enter hotel.service type
 			try {
-				serviceType = IOUtils.getValidServiceType("Enter service type");
+				serviceType = IOUtils.getValidServiceType("Enter hotel.service type");
 			}
 			catch (NullInputException e) {
-				IOUtils.outputln("RecordServiceUI: User cancelled at enter service type");
+				IOUtils.outputln("RecordServiceUI: User cancelled at enter hotel.service type");
 				throw new CancelException();
 			}			
 			//enter cost

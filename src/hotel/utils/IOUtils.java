@@ -147,7 +147,7 @@ public class IOUtils {
 						ct.getIdentifier(), ct.getVendor());
 				IOUtils.outputln(line);
 			}
-			cardSelector = IOUtils.input("Enter credit card type selection: ").toUpperCase();
+			cardSelector = IOUtils.input("Enter hotel.credit card type selection: ").toUpperCase();
 			if (cardSelector.isEmpty()) {
 				throw new NullInputException();
 			}

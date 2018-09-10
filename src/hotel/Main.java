@@ -62,7 +62,7 @@ public class Main {
 
 
 	private static void recordService() {
-		IOUtils.outputln("\nRecording service\n");
+		IOUtils.outputln("\nRecording hotel.service\n");
 		new RecordServiceCTL(hotel).run();
 	}
 	

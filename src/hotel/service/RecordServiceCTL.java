@@ -37,7 +37,7 @@ public class RecordServiceCTL {
 		}
 		booking = hotel.findActiveBookingByRoomId(roomNumber);
 		if (booking == null) {
-			String mesg = String.format("No active booking for room id: %d", roomNumber);
+			String mesg = String.format("No active hotel.booking for room id: %d", roomNumber);
 			recordServiceUI.displayMessage(mesg);
 		}
 		else {
@@ -54,14 +54,14 @@ public class RecordServiceCTL {
 
 
 	public void cancel() {
-		recordServiceUI.displayMessage("Pay for service cancelled");
+		recordServiceUI.displayMessage("Pay for hotel.service cancelled");
 		state = State.CANCELLED;
 		recordServiceUI.setState(RecordServiceUI.State.CANCELLED);
 	}
 
 
 	public void completed() {
-		recordServiceUI.displayMessage("Pay for service completed");
+		recordServiceUI.displayMessage("Pay for hotel.service completed");
 	}
 
 
