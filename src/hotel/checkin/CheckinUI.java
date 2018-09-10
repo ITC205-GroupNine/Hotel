@@ -67,10 +67,10 @@ public class CheckinUI {
 		
 		boolean confirmed = false;
 		try {
-			confirmed = IOUtils.getBooleanYesNoAnswer("Confirm checkin? ");
+			confirmed = IOUtils.getBooleanYesNoAnswer("Confirm hotel.checkin? ");
 		}
 		catch (NullInputException e) {
-			IOUtils.outputln("BookingUI: User cancelled at confirming checkin");
+			IOUtils.outputln("BookingUI: User cancelled at confirming hotel.checkin");
 			throw new CancelException();
 		}
 		return confirmed;
