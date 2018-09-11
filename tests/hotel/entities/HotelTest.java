@@ -1,4 +1,4 @@
-package entities;
+package hotel.entities;
 
 import org.junit.jupiter.api.Test;
 
