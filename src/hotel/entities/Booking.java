@@ -10,140 +10,147 @@ import hotel.credit.CreditCard;
 import hotel.utils.IOUtils;
 
 public class Booking {
-	
-	private enum State {PENDING, CHECKED_IN, CHECKED_OUT};
-	
-	private Guest guest;
-	private Room room;
-	private Date bookedArrival; 
-	private int stayLength;
-	int numberOfOccupants;
-	long confirmationNumber;
-	CreditCard creditCard;
-	
-	private List<ServiceCharge> charges;
-	
-	private State state;
+
+    private enum State {PENDING, CHECKED_IN, CHECKED_OUT}
+
+    private Guest guest;
+    private Room room;
+    private Date bookedArrival;
+    private int stayLength;
+    int numberOfOccupants;
+    long confirmationNumber;
+    CreditCard creditCard;
+    private List<ServiceCharge> charges;
+    private State state;
+
+    public Booking(Guest guest, Room room,
+            Date arrivalDate, int stayLength,
+            int numberOfOccupants,
+            CreditCard creditCard) {
+
+        this.guest = guest;
+        this.room = room;
+        this.bookedArrival = arrivalDate;
+        this.stayLength = stayLength;
+        this.numberOfOccupants = numberOfOccupants;
+        this.confirmationNumber = generateConfirmationNumber(room.getId(), arrivalDate);
+        this.creditCard = creditCard;
+        this.charges = new ArrayList<>();
+        this.state = State.PENDING;
+    }
 
 
-	
-	public Booking(Guest guest, Room room, 
-			Date arrivalDate, int stayLength, 
-			int numberOfOccupants, 
-			CreditCard creditCard) {
-		
-		this.guest = guest;
-		this.room = room;
-		this.bookedArrival = arrivalDate;
-		this.stayLength = stayLength;
-		this.numberOfOccupants = numberOfOccupants;
-		this.confirmationNumber = generateConfirmationNumber(room.getId(), arrivalDate);
-		this.creditCard = creditCard;
-		this.charges = new ArrayList<>();
-		this.state = State.PENDING;
-	}
-
-	
-	private long generateConfirmationNumber(int roomId, Date arrivalDate) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(arrivalDate);
-		
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		
-		String numberString = String.format("%d%d%d%d", day, month, year, roomId);
-		
-		return Long.parseLong(numberString);
-	}
+    private long generateConfirmationNumber(int roomId, Date arrivalDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(arrivalDate);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String numberString = String.format("%d%d%d%d", day, month, year, roomId);
+        return Long.parseLong(numberString);
+    }
 
 
-	public boolean doTimesConflict(Date requestedArrival, int stayLength) {
-		IOUtils.trace("Booking: timesConflict");
+    public boolean doTimesConflict(Date requestedArrival, int stayLength) {
+        IOUtils.trace("Booking: timesConflict");
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(bookedArrival);
-		calendar.add(Calendar.DATE, stayLength);
-		Date bookedDeparture = calendar.getTime();
-		
-		calendar.setTime(requestedArrival);
-		calendar.add(Calendar.DATE, stayLength);
-		Date requestedDeparture = calendar.getTime();
-		
-		boolean doesConflict = requestedArrival.before(bookedDeparture) && 
-				requestedDeparture.after(bookedArrival);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(bookedArrival);
+        calendar.add(Calendar.DATE, stayLength);
+        Date bookedDeparture = calendar.getTime();
 
-		return doesConflict;
-	}
+        calendar.setTime(requestedArrival);
+        calendar.add(Calendar.DATE, stayLength);
+        Date requestedDeparture = calendar.getTime();
 
+        boolean doesConflict = requestedArrival.before(bookedDeparture) &&
+                requestedDeparture.after(bookedArrival);
 
-	public long getConfirmationNumber() {
-		return confirmationNumber;
-	}
+        return doesConflict;
+    }
 
 
-	public int getRoomId() {
-		return room.getId();
-	}
-	
-	
-	public Room getRoom() {
-		return room;
-	}
+    public long getConfirmationNumber() {
+        return confirmationNumber;
+    }
 
 
-	public Date getArrivalDate() {
-		return bookedArrival;
-	}
+    public int getRoomId() {
+        return room.getId();
+    }
 
 
-	public int getStayLength() {
-		return stayLength;
-	}
+    public Room getRoom() {
+        return room;
+    }
 
 
-	public Guest getGuest() {
-		return guest;
-	}
+    public Date getArrivalDate() {
+        return bookedArrival;
+    }
 
 
-	public CreditCard getCreditCard() {
-		return creditCard;
-	}
+    public int getStayLength() {
+        return stayLength;
+    }
 
 
-	public boolean isPending() {
-		return state == State.PENDING;
-	}
+    public Guest getGuest() {
+        return guest;
+    }
 
 
-	public boolean isCheckedIn() {
-		return state == State.CHECKED_IN;
-	}
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
 
 
-	public boolean isCheckedOut() {
-		return state == State.CHECKED_OUT;
-	}
+    public boolean isPending() {
+        return state == State.PENDING;
+    }
 
 
-	public List<ServiceCharge> getCharges() {
-		return Collections.unmodifiableList(charges);
-	}
+    public boolean isCheckedIn() {
+        return state == State.CHECKED_IN;
+    }
 
 
-	public void checkIn() {
-		// TODO Auto-generated method stub
-	}
+    public boolean isCheckedOut() {
+        return state == State.CHECKED_OUT;
+    }
 
 
-	public void addServiceCharge(ServiceType serviceType, double cost) {
-		// TODO Auto-generated method stub
-	}
+    public List<ServiceCharge> getCharges() {
+        return Collections.unmodifiableList(charges);
+    }
 
 
-	public void checkOut() {
-		// TODO Auto-generated method stub
-	}
+    public void checkIn() {
+        if (!isPending()){
+            throw new RuntimeException("Booking Entity cannot call checkIn except in PENDING State");
+        }
+        room.checkin(); //should I check the room is ready yet or nyet?
+        state = State.CHECKED_IN;
+    }
+
+
+    public void addServiceCharge(ServiceType serviceType, double cost) {
+        if (!isCheckedIn()){
+            throw new RuntimeException("Booking Entity charges cannot be added except in CHECKED_IN state");
+        }
+        ServiceCharge newCharge = new ServiceCharge(serviceType,cost);
+        charges.add(newCharge);
+
+    }
+
+
+    public void checkOut() {
+        if (!isCheckedIn()){
+            throw new RuntimeException("Booking Entity charges cannot be added except in CHECKED_IN state");
+        }
+        room.checkout(this);
+        state = State.CHECKED_OUT;
+
+    }
 
 }
