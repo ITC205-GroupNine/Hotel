@@ -91,8 +91,7 @@ public class Hotel {
 
     public long book(Room room, Guest guest, Date arrivalDate,
                      int stayLength, int occupantNumber, CreditCard creditCard) {
-        room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard);
-        Booking booking = new Booking(guest, room, arrivalDate, stayLength, occupantNumber, creditCard);
+        Booking booking =  room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard);
         long confirmationNumber = booking.getConfirmationNumber();
         bookingsByConfirmationNumber.put(confirmationNumber, booking);
         DateFormat dateFormat = new SimpleDateFormat("ddmmyyyy");
