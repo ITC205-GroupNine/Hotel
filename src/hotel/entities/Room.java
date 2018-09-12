@@ -9,7 +9,7 @@ import hotel.utils.IOUtils;
 
 public class Room {
     
-    private enum State {READY, OCCUPIED, PENDING}
+    private enum State {READY, OCCUPIED}
     
     private int id;
     private RoomType roomType;
@@ -67,10 +67,8 @@ public class Room {
         
         if (availability) {
             Booking booking = new Booking(guest, this, arrivalDate, stayLength, numberOfOccupants, creditCard);
-            state = State.PENDING;
             return booking;
         } else {
-            
             return null;
         }
     }
@@ -78,23 +76,21 @@ public class Room {
     
     public void checkIn() {
         
-        if (state != State.READY) {
+        if (!this.isReady()) {
             throw new RuntimeException("The Room is not ready to be checked in must be in a READY state");
         } else {
             state = State.OCCUPIED;
-            //booking.checkIn();
         }
     }
     
     
     public void checkout(Booking booking) {
         
-        if (state != State.OCCUPIED) {
+        if (!this.isReady()) {
             throw new RuntimeException("Checkout cannot be processed unless in the OCCUPIED State");
         } else {
+            bookings.remove(booking);
             state = State.READY;
-            booking.checkOut();
-            
         }
     }
 }
