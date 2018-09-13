@@ -94,41 +94,39 @@ public class Hotel {
         Booking booking =  room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard);
         long confirmationNumber = booking.getConfirmationNumber();
         bookingsByConfirmationNumber.put(confirmationNumber, booking);
-        DateFormat dateFormat = new SimpleDateFormat("ddmmyyyy");
-        String bookingId = dateFormat.format(arrivalDate) + room.getId();
-        return Long.valueOf(bookingId);
+        return Long.valueOf(confirmationNumber);
     }
 
 
     public void checkin(long confirmationNumber) {
-        try {
-            Booking booking = bookingsByConfirmationNumber.get(confirmationNumber);
+        Booking booking = bookingsByConfirmationNumber.get(confirmationNumber);
+        if (booking != null){
             int roomId = booking.getRoomId();
             booking.checkIn();
             activeBookingsByRoomId.put(roomId, booking);
-        } catch(Exception e) {
-            System.out.println("Booking does not exist");
+        } else {
+            throw new RuntimeException("Hotel.checkin(): Booking does not exist for confirmation number " + confirmationNumber);
         }
     }
 
 
     public void addServiceCharge(int roomId, ServiceType serviceType, double cost) {
-        try{
-            Booking booking = activeBookingsByRoomId.get(roomId);
+        Booking booking = activeBookingsByRoomId.get(roomId);
+        if (booking != null){
             booking.addServiceCharge(serviceType, cost);
-        } catch(Exception e){
-            System.out.println("Booking does not exist");
+        } else {
+        throw new RuntimeException("Hotel.addServiceCharge(): Booking does not exist for room id " + roomId);
         }
     }
 
 
     public void checkout(int roomId) {
-        try{
-            Booking booking = activeBookingsByRoomId.get(roomId);
+        Booking booking = activeBookingsByRoomId.get(roomId);
+        if (booking != null){
             booking.checkOut();
             activeBookingsByRoomId.remove(roomId);
-        } catch(Exception e){
-            System.out.println("Booking does not exist");
+        } else {
+            throw new RuntimeException("Hotel.checkout(): Booking does not exist for room id " + roomId);
         }
     }
 
