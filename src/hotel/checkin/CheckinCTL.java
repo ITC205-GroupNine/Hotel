@@ -38,7 +38,6 @@ public class CheckinCTL {
         }
         this.confirmationNumber = confirmationNumber;
         booking = hotel.findBookingByConfirmationNumber(confirmationNumber);
-
         String message = null;
         if (booking == null) {
             message = String.format("No hotel.booking for confirmation number %d found", confirmationNumber);
@@ -48,20 +47,17 @@ public class CheckinCTL {
         else if (!booking.isPending()){
             if (booking.isCheckedIn()) {
                 message = String.format("Booking %d has already been checked in", confirmationNumber);
-            }
-            else {
+            } else {
                 message = String.format("Booking %d has already been checked out", confirmationNumber);
             }
             checkInUI.displayMessage(message);
             //cancel();
-        }
-        else {
+        } else {
             Room room = booking.getRoom();
             if (!room.isReady()) {
                 checkInUI.displayMessage("Room is not ready, sorry");
                 //cancel();
-            }
-            else {
+            } else {
                 Guest guest = booking.getGuest();
                 CreditCard card = booking.getCreditCard();
 
