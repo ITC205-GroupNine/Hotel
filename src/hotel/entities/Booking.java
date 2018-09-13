@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
 import hotel.credit.CreditCard;
 import hotel.utils.IOUtils;
 
@@ -23,11 +22,11 @@ public class Booking {
     private List<ServiceCharge> charges;
     private State state;
 
+
     public Booking(Guest guest, Room room,
             Date arrivalDate, int stayLength,
             int numberOfOccupants,
             CreditCard creditCard) {
-
         this.guest = guest;
         this.room = room;
         this.bookedArrival = arrivalDate;
@@ -53,16 +52,13 @@ public class Booking {
 
     public boolean doTimesConflict(Date requestedArrival, int stayLength) {
         IOUtils.trace("Booking: timesConflict");
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(bookedArrival);
         calendar.add(Calendar.DATE, stayLength);
         Date bookedDeparture = calendar.getTime();
-
         calendar.setTime(requestedArrival);
         calendar.add(Calendar.DATE, stayLength);
         Date requestedDeparture = calendar.getTime();
-
         boolean doesConflict = requestedArrival.before(bookedDeparture) &&
                 requestedDeparture.after(bookedArrival);
 
@@ -129,7 +125,7 @@ public class Booking {
         if (!isPending()){
             throw new RuntimeException("Booking Entity cannot call checkIn except in PENDING State");
         }
-        room.checkin(); //should I check the room is ready yet or nyet?
+        room.checkin();
         state = State.CHECKED_IN;
     }
 
