@@ -4,13 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
-import hotel.credit.CreditCard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,7 +20,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import hotel.credit.CreditCard;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class HotelTest {
 
 
@@ -28,11 +33,14 @@ class HotelTest {
     int stayLength;
     int occupantNumber;
     @Mock CreditCard mCard;
-    @Spy Map<Long, Booking> bookingsByConfirmationNumber;
+    @Spy Map<Long, Booking> bookingsByConfirmationNumber = new HashMap<Long, Booking>();
     SimpleDateFormat format;
-
-    @Mock Booking mBooking;
+    int roomId;
     long confirmationNumber;
+    @Mock Booking mBooking;
+    @Spy Map<Integer, Booking> activeBookingsByRoomId = new HashMap<Integer, Booking>();
+
+
 
     @BeforeEach
     void setUp() {
@@ -45,18 +53,21 @@ class HotelTest {
         stayLength = 1;
         occupantNumber = 1;
         confirmationNumber = 11022018101L;
+        roomId = 101;
     }
+
 
     @AfterEach
     void tearDown() {
     }
 
+
     @InjectMocks Hotel hotel;
 
+
     @Test
-    void book() {
+    void bookCheckOutput() {
         //arrange
-        bookingsByConfirmationNumber = new HashMap<Long, Booking>();
         when(mRoom.book(mGuest, arrivalDate, stayLength, occupantNumber, mCard)).thenReturn(mBooking);
         when(mBooking.getConfirmationNumber()).thenReturn(confirmationNumber);
         assertEquals(0, bookingsByConfirmationNumber.size());
@@ -69,18 +80,80 @@ class HotelTest {
         assertEquals(confirmationNumber, expected);
         assertEquals(1, bookingsByConfirmationNumber.size());
         assertEquals(mBooking, hotel.findBookingByConfirmationNumber(expected));
+    }
 
+
+    @Test
+    void checkinIdealUseCase() {
+        //arrange
+        when(hotel.bookingsByConfirmationNumber.get(confirmationNumber)).thenReturn(mBooking);
+        when(mBooking.getRoomId()).thenReturn(roomId);
+        assertEquals(0, activeBookingsByRoomId.size());
+        //act
+        hotel.checkin(confirmationNumber);
+        //assert
+        assertEquals(1, activeBookingsByRoomId.size());
     }
 
     @Test
-    void checkin() {
+    void checkinNullBookingException() {
+        //arrange
+        when(hotel.bookingsByConfirmationNumber.get(confirmationNumber)).thenReturn(null);
+        assertEquals(0, activeBookingsByRoomId.size());
+        //act
+        Executable e = () -> hotel.checkin(confirmationNumber);
+        Throwable t = assertThrows(RuntimeException.class, e);
+        //assert
+        assertEquals(0, activeBookingsByRoomId.size());
+        assertEquals("Hotel.checkin(): Booking does not exist for confirmation number " + confirmationNumber, t.getMessage());
+    }
+
+
+    @Test
+    void addServiceChargeIdealUseCase() {
+        //arrange
+        ServiceType serviceType = ServiceType.ROOM_SERVICE;
+        double cost = 1D;
+        when(hotel.activeBookingsByRoomId.get(roomId)).thenReturn(mBooking);
+        //act
+        hotel.addServiceCharge(roomId, serviceType, cost);
+        //assert
+        verify(mBooking).addServiceCharge(serviceType, cost);
     }
 
     @Test
-    void addServiceCharge() {
+    void addServiceNullBooking() {
+        //arrange
+        ServiceType serviceType = ServiceType.ROOM_SERVICE;
+        double cost = 1D;
+        when(activeBookingsByRoomId.get(roomId)).thenReturn(null);
+        //act
+        Executable e = () -> hotel.addServiceCharge(roomId, serviceType, cost);
+        Throwable t = assertThrows(RuntimeException.class, e);
+        //assert
+        assertEquals("Hotel.addServiceCharge(): Booking does not exist for room id " + roomId, t.getMessage());
     }
 
+
     @Test
-    void checkout() {
+    void checkoutIdealUseCase() {
+        //arrange
+        when(activeBookingsByRoomId.get(roomId)).thenReturn(mBooking);
+        //act
+        hotel.checkout(roomId);
+        //assert
+        verify(mBooking).checkOut();
+    }
+
+
+    @Test
+    void checkoutNullBooking() {
+        //arrange
+        when(activeBookingsByRoomId.get(roomId)).thenReturn(null);
+        //act
+        Executable e = () -> hotel.checkout(roomId);
+        Throwable t = assertThrows(RuntimeException.class, e);
+        //assert
+        assertEquals("Hotel.checkout(): Booking does not exist for room id " + roomId, t.getMessage());
     }
 }
