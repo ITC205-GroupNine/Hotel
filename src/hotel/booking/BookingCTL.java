@@ -16,7 +16,7 @@ import hotel.utils.IOUtils;
 public class BookingCTL {
 	
 	
-	private static enum State {PHONE, ROOM, REGISTER, TIMES, CREDIT, APPROVED, CANCELLED, COMPLETED}	
+	public static enum State {PHONE, ROOM, REGISTER, TIMES, CREDIT, APPROVED, CANCELLED, COMPLETED}
 	
 	private BookingUI bookingUI;
 	private Hotel hotel;
@@ -25,7 +25,7 @@ public class BookingCTL {
 	private Room room;
 	private double cost;
 	
-	private State state;
+	public State state;
 	private int phoneNumber;
 	private RoomType selectedRoomType;
 	private int occupantNumber;
@@ -156,7 +156,7 @@ public class BookingCTL {
 				bookingUI.displayMessage("Credit Not Authorized");
 			}
 		} else {
-			throw new RuntimeException("state not set to State.CREDIT");
+			throw new RuntimeException("BookingCTL.creditDetailsEntered(): state not set to State.CREDIT");
 		}
 	}
 
