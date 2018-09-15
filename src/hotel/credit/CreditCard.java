@@ -1,12 +1,14 @@
 package hotel.credit;
 
 public class CreditCard implements ICreditCard {
-	
+
+    private static CreditCard self;
+
 	private CreditCardType type;
 	private int number;
 	private int ccv;
-	
-	
+
+
 	public CreditCard(CreditCardType type, int number, int ccv) {
 		this.type = type;
 		this.number = number;

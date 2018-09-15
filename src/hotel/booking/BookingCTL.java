@@ -32,8 +32,8 @@ public class BookingCTL {
 	private Date arrivalDate;
 	private int stayLength;
 
-	
-	public BookingCTL(Hotel hotel) {
+
+    public BookingCTL(Hotel hotel) {
 		this.bookingUI = new BookingUI(this);
 		this.hotel = hotel;
 		state = State.PHONE;
@@ -135,11 +135,21 @@ public class BookingCTL {
 		}
 	}
 
+    //added for testing so CreditCard can be mocked
+	public CreditCard getCard(CreditCardType type, int number, int ccv){
+	    return new CreditCard(type, number, ccv);
+    }
+
+    //added for testing so CreditAuthorizer can be mocked
+    public CreditAuthorizer getCreditAuthorizer(){
+	    return CreditAuthorizer.getInstance();
+    }
+
 
 	public void creditDetailsEntered(CreditCardType type, int number, int ccv) {
 		if (state == State.CREDIT) {
-			CreditCard creditCard = new CreditCard(type, number, ccv);
-			CreditAuthorizer creditAuthorizer = new CreditAuthorizer();
+			CreditCard creditCard = getCard(type, number, ccv);
+            CreditAuthorizer creditAuthorizer = getCreditAuthorizer();
 			boolean approved = creditAuthorizer.authorize(creditCard, cost);
 			if (approved) {
 				long confirmationNumber = hotel.book(room, guest, arrivalDate, stayLength, occupantNumber, creditCard);
