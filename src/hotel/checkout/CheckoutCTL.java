@@ -44,12 +44,12 @@ public class CheckoutCTL {
         this.roomId = roomId;
         Booking booking = hotel.findActiveBookingByRoomId(roomId);
         if (booking == null) {
-            String msg = String.format("No active hotel.booking found for room id %d", roomId);
+            String msg = String.format("No active hotel.hotel.booking found for room id %d", roomId);
             checkoutUi.displayMessage(msg);
             //cancel();
         } else {
             StringBuilder sb = new StringBuilder();
-            sb.append(String.format("Charges for room: %d, hotel.booking: %d\n",
+            sb.append(String.format("Charges for room: %d, hotel.hotel.booking: %d\n",
                     roomId, booking.getConfirmationNumber()));
             
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
