@@ -88,7 +88,8 @@ public class Room {
         
         if (!this.isReady()) {
             throw new RuntimeException("Checkout cannot be processed unless in the OCCUPIED State");
-        } else {
+        }
+        if(!bookings.contains(booking)){
             bookings.remove(booking);
             state = State.READY;
         }
