@@ -59,6 +59,11 @@ public class Room {
     public boolean isReady() {
         return state == State.READY;
     }
+
+
+    boolean isOccupied(){
+        return state == State.OCCUPIED;
+    }
     
     
     public Booking book(Guest guest, Date arrivalDate, int stayLength, int numberOfOccupants, CreditCard creditCard) {
@@ -78,20 +83,20 @@ public class Room {
         
         if (!this.isReady()) {
             throw new RuntimeException("The Room is not ready to be checked in must be in a READY state");
-        } else {
-            state = State.OCCUPIED;
         }
+        state = State.OCCUPIED;
     }
     
     
-    public void checkout(Booking booking) {
+    public void checkOut(Booking booking) {
         
-        if (!this.isReady()) {
+        if (!this.isOccupied()) {
             throw new RuntimeException("Checkout cannot be processed unless in the OCCUPIED State");
         }
-        if(!bookings.contains(booking)){
+        if(!bookings.contains(booking)) {
+            throw new RuntimeException("Cannot check out of a Room that isn't associated with the Booking");
+        }
             bookings.remove(booking);
             state = State.READY;
         }
     }
-}
