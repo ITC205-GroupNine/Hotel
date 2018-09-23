@@ -9,7 +9,7 @@ import hotel.utils.IOUtils;
 
 public class CheckinCTL {
 
-    private enum State {CHECKING, CONFIRMING, CANCELLED, COMPLETED }
+    enum State {CHECKING, CONFIRMING, CANCELLED, COMPLETED }
 
     private Hotel hotel;
     private CheckinUI checkInUI;
@@ -84,8 +84,6 @@ public class CheckinCTL {
             checkInUI.setState(CheckinUI.State.COMPLETED);
             completed();
         } else {
-            state = State.CANCELLED;
-            checkInUI.setState(CheckinUI.State.CANCELLED);
             cancel();
         }
     }
