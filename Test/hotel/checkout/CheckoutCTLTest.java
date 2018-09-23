@@ -15,9 +15,6 @@ import org.junit.jupiter.api.function.Executable;
 import hotel.entities.Hotel;
 import hotel.credit.CreditCard;
 import hotel.credit.CreditCardType;
-import hotel.checkout.CheckoutCTLTest;
-
-import java.util.function.BooleanSupplier;
 
 @ExtendWith(MockitoExtension.class)
 public class CheckoutCTLTest {
@@ -25,21 +22,24 @@ public class CheckoutCTLTest {
     @Mock
     Hotel mhotel;
     @Mock
-    CreditCard Card;
+    CreditCard card;
     @Mock
-    CreditAuthorizer CreditAuthorizer;
+    CreditAuthorizer creditAuthorizer;
     @Mock
-    CheckoutUI CheckoutUi;
+    CheckoutUI checkoutUi;
     
     
     private CreditCardType creditCardType;
     private int cardNumber;
     private int ccv;
-    int cost;
+    int total;
     
     @BeforeEach
     void setUp() {
-        cost = 0;
+        total = 0;
+        cardNumber = 6;
+        ccv = 1;
+        
     }
     
     @AfterEach
@@ -55,12 +55,13 @@ public class CheckoutCTLTest {
     void creditDetailsEntered() {
         //arrange
         checkOutCTL.state = CheckoutCTL.State.CREDIT;
-        when(checkOutCTL.getCard(creditCardType, cardNumber, ccv)).thenReturn(Card);
-        when(checkOutCTL.getCreditAuthorizer()).thenReturn(CreditAuthorizer);
+        when(checkOutCTL.getCard(creditCardType, cardNumber, ccv)).thenReturn(card);
+        when(checkOutCTL.getCreditAuthorizer()).thenReturn(creditAuthorizer);
+        //act
         checkOutCTL.creditDetailsEntered(creditCardType, cardNumber, ccv);
         //assert
         assertEquals(CheckoutCTL.State.COMPLETED, checkOutCTL.state);
-        verify(CheckoutUi).setState(hotel.checkout.CheckoutUI.State.COMPLETED);
+        verify(checkoutUi).setState(hotel.checkout.CheckoutUI.State.COMPLETED);
     }
     
     
@@ -69,12 +70,12 @@ public class CheckoutCTLTest {
         //arrange
         //changed state and enum State to public for testing purposes
         checkOutCTL.state = CheckoutCTL.State.CREDIT;
-        //when(checkOutCTL.getCreditAuthorizer()).thenReturn(CreditAuthorizer);
-        assertFalse(CheckoutCTL.getApproval());
+        checkOutCTL.card = CheckoutCTL.getCard(creditCardType, cardNumber, ccv);
         //act
         checkOutCTL.creditDetailsEntered(creditCardType, cardNumber, ccv);
         //assert
-        verify(CheckoutUi).displayMessage("Credit has not been approved");
+        //assert
+        verify(checkoutUi).displayMessage("Credit has not been approved");
     }
     
     @Test
