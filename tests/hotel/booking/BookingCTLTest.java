@@ -97,16 +97,10 @@ class BookingCTLTest {
         when(bookingCTL.getCard(creditCardType, cardNumber, ccv)).thenReturn(mCard);
         when(bookingCTL.getCreditAuthorizer()).thenReturn(mCreditAuthorizer);
         when(mCreditAuthorizer.authorize(mCard, cost)).thenReturn(true);
-        //when(mHotel.book(mRoom, mGuest, arrivalDate, stayLength, occupantNumber, mCard)).thenReturn(confirmationNumber);
-        //when(mRoom.getDescription()).thenReturn(roomDescription);
-        //when(mRoom.getId()).thenReturn(roomId);
-        //when(mCard.getVendor()).thenReturn(vendorName);
-        //when(mCard.getNumber()).thenReturn(cardNumber);
-        //when(mGuest.getName()).thenReturn(guestName);
+
         //act
         bookingCTL.creditDetailsEntered(creditCardType, cardNumber, ccv);
         //assert
-        //verify(mBookingUI).displayConfirmedBooking(roomDescription, roomId, arrivalDate, vendor, guestName, vendorName, cardNumber, cost, confirmationNumber);
         assertEquals(BookingCTL.State.COMPLETED, bookingCTL.state);
         verify(mBookingUI).setState(BookingUI.State.COMPLETED);
     }
