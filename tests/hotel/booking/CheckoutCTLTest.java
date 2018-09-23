@@ -1,4 +1,4 @@
-package hotel.checkout;
+package hotel.booking;
 
 
 import hotel.credit.CreditAuthorizer;
