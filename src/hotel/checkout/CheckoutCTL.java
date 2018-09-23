@@ -14,14 +14,15 @@ import hotel.utils.IOUtils;
 
 public class CheckoutCTL {
     
-    private enum State {ROOM, ACCEPT, CREDIT, CANCELLED, COMPLETED}
+    private static boolean approval;
+    
+    enum State {ROOM, ACCEPT, CREDIT, CANCELLED, COMPLETED}
     
     private Hotel hotel;
-    private State state;
+    State state;
     private CheckoutUI checkoutUi;
     private double total;
     private int roomId;
-    
     
     public CheckoutCTL(Hotel hotel) {
         this.hotel = hotel;
@@ -95,12 +96,27 @@ public class CheckoutCTL {
     }
     
     
-    public void creditDetailsEntered(CreditCardType type, int number, int ccv) {
+    //added for testing so CreditCard can be mocked
+    public CreditCard getCard(CreditCardType type, int number, int ccv){
+        return new CreditCard(type, number, ccv);
+    }
+    
+    //added for testing so CreditAuthorizer can be mocked
+    public CreditAuthorizer getCreditAuthorizer(){
+        return CreditAuthorizer.getInstance();
+    }
+    //created for testing creditDetailsEnteredNotApproved
+    static boolean getApproval(){
+        return approval = false;
+    }
+    
+    
+    void creditDetailsEntered(CreditCardType type, int number, int ccv) {
         
         if (state == State.CREDIT) {
             CreditCard card = new CreditCard(type, number, ccv);
             CreditAuthorizer creditAuthorizer = new CreditAuthorizer();
-            boolean approval = creditAuthorizer.authorize(card, total);
+            approval = creditAuthorizer.authorize(card, total);
             if (approval) {
                 this.hotel.checkout(roomId);
                 checkoutUi.displayMessage("$" + total + " has been debited from your card");
