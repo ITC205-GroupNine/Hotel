@@ -94,7 +94,7 @@ public class Hotel {
         Booking booking =  room.book(guest, arrivalDate, stayLength, occupantNumber, creditCard);
         long confirmationNumber = booking.getConfirmationNumber();
         bookingsByConfirmationNumber.put(confirmationNumber, booking);
-        return Long.valueOf(confirmationNumber);
+        return confirmationNumber;
     }
 
 

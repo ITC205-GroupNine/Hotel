@@ -16,7 +16,7 @@ import hotel.utils.IOUtils;
 public class BookingCTL {
 	
 	
-	public static enum State {PHONE, ROOM, REGISTER, TIMES, CREDIT, APPROVED, CANCELLED, COMPLETED}
+	private static enum State {PHONE, ROOM, REGISTER, TIMES, CREDIT, APPROVED, CANCELLED, COMPLETED}
 	
 	private BookingUI bookingUI;
 	private Hotel hotel;
@@ -25,7 +25,7 @@ public class BookingCTL {
 	private Room room;
 	private double cost;
 	
-	public State state;
+	private State state;
 	private int phoneNumber;
 	private RoomType selectedRoomType;
 	private int occupantNumber;
