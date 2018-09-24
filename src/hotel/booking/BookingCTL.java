@@ -16,7 +16,7 @@ import hotel.utils.IOUtils;
 public class BookingCTL {
 	
 	
-	private static enum State {PHONE, ROOM, REGISTER, TIMES, CREDIT, APPROVED, CANCELLED, COMPLETED}	
+	private static enum State {PHONE, ROOM, REGISTER, TIMES, CREDIT, APPROVED, CANCELLED, COMPLETED}
 	
 	private BookingUI bookingUI;
 	private Hotel hotel;
@@ -32,8 +32,8 @@ public class BookingCTL {
 	private Date arrivalDate;
 	private int stayLength;
 
-	
-	public BookingCTL(Hotel hotel) {
+
+    public BookingCTL(Hotel hotel) {
 		this.bookingUI = new BookingUI(this);
 		this.hotel = hotel;
 		state = State.PHONE;
@@ -135,9 +135,39 @@ public class BookingCTL {
 		}
 	}
 
+    //added for testing so CreditCard can be mocked
+	public CreditCard getCard(CreditCardType type, int number, int ccv){
+	    return new CreditCard(type, number, ccv);
+    }
+
+    //added for testing so CreditAuthorizer can be mocked
+    public CreditAuthorizer getCreditAuthorizer(){
+	    return CreditAuthorizer.getInstance();
+    }
+
 
 	public void creditDetailsEntered(CreditCardType type, int number, int ccv) {
-		// TODO Auto-generated method stub
+		if (state == State.CREDIT) {
+			CreditCard creditCard = getCard(type, number, ccv);
+            CreditAuthorizer creditAuthorizer = getCreditAuthorizer();
+			boolean approved = creditAuthorizer.authorize(creditCard, cost);
+			if (approved) {
+				long confirmationNumber = hotel.book(room, guest, arrivalDate, stayLength, occupantNumber, creditCard);
+				String roomDescription = room.getDescription();
+				int roomNumber = room.getId();
+				String vendor = creditCard.getVendor();
+				int cardNumber = creditCard.getNumber();
+				String guestName = guest.getName();
+				bookingUI.displayConfirmedBooking(roomDescription, roomNumber, arrivalDate,
+						stayLength, guestName, vendor, cardNumber, cost, confirmationNumber);
+				state = State.COMPLETED;
+				bookingUI.setState(BookingUI.State.COMPLETED);
+			} else {
+				bookingUI.displayMessage("Credit Not Authorized");
+			}
+		} else {
+			throw new RuntimeException("BookingCTL.creditDetailsEntered(): state not set to State.CREDIT");
+		}
 	}
 
 
