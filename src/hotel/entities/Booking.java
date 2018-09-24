@@ -125,7 +125,7 @@ public class Booking {
         if (!isPending()){
             throw new RuntimeException("Booking Entity cannot call checkIn except in PENDING State");
         }
-        room.checkin();
+        room.checkIn();
         state = State.CHECKED_IN;
     }
 
@@ -144,7 +144,7 @@ public class Booking {
         if (!isCheckedIn()){
             throw new RuntimeException("Booking Entity charges cannot be added except in CHECKED_IN state");
         }
-        room.checkout(this);
+        room.checkOut(this);
         state = State.CHECKED_OUT;
 
     }
