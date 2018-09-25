@@ -113,7 +113,7 @@ public class BookingCTL {
 		room = hotel.findAvailableRoom(selectedRoomType, arrivalDate, stayLength);
 		
 		if (room == null) {				
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(arrivalDate);
 			calendar.add(Calendar.DATE, stayLength);

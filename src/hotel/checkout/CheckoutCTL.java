@@ -23,6 +23,7 @@ public class CheckoutCTL {
     private CheckoutUI checkoutUi;
     private double total;
     private int roomId;
+    CreditCard card;
     
     public CheckoutCTL(Hotel hotel) {
         this.hotel = hotel;
