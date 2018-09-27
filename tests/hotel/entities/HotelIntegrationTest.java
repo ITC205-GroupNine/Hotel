@@ -1,25 +1,25 @@
 package hotel.entities;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
-import hotel.credit.CreditCardType;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import hotel.credit.CreditCard;
+import hotel.credit.CreditCardType;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import hotel.credit.CreditCard;
+
 
 //Hotel-Booking-Room
 @ExtendWith(MockitoExtension.class)
@@ -49,10 +49,10 @@ public class HotelIntegrationTest {
         occupantNumber = 1;
         confirmationNumber = 11122018101L;
         roomId = 101;
+
         hotel = new Hotel();
         room = new Room(roomId, RoomType.SINGLE);
         guest = new Guest("bob", "1 bob st", 11);
-        //booking = new Booking(guest, room, arrivalDate, stayLength, occupantNumber, card);
     }
 
 

@@ -17,7 +17,7 @@ public class Room {
     private State state;
     
     
-    Room(int id, RoomType roomType) {
+    public Room(int id, RoomType roomType) {
         this.id = id;
         this.roomType = roomType;
         bookings = new ArrayList<>();

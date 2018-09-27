@@ -16,21 +16,21 @@ import hotel.utils.IOUtils;
 public class BookingCTL {
 	
 	
-	private static enum State {PHONE, ROOM, REGISTER, TIMES, CREDIT, APPROVED, CANCELLED, COMPLETED}
+	public static enum State {PHONE, ROOM, REGISTER, TIMES, CREDIT, APPROVED, CANCELLED, COMPLETED}
 	
-	private BookingUI bookingUI;
-	private Hotel hotel;
+	BookingUI bookingUI;
+	Hotel hotel;
 
-	private Guest guest;
-	private Room room;
-	private double cost;
+	Guest guest;
+	Room room;
+	double cost;
 	
-	private State state;
-	private int phoneNumber;
-	private RoomType selectedRoomType;
-	private int occupantNumber;
-	private Date arrivalDate;
-	private int stayLength;
+	State state;
+	int phoneNumber;
+	RoomType selectedRoomType;
+	int occupantNumber;
+	Date arrivalDate;
+	int stayLength;
 
 
     public BookingCTL(Hotel hotel) {
@@ -44,9 +44,19 @@ public class BookingCTL {
 		IOUtils.trace("BookingCTL: run");
 		bookingUI.run();
 	}
-	
-	
-	public void phoneNumberEntered(int phoneNumber) {
+
+    //added for testing
+    public State getState() {
+        return state;
+    }
+
+    //added for testing
+    public void setState(State state) {
+        this.state = state;
+    }
+
+
+    public void phoneNumberEntered(int phoneNumber) {
 		if (state != State.PHONE) {
 			String mesg = String.format("BookingCTL: phoneNumberEntered : bad state : %s", state);
 			throw new RuntimeException(mesg);
@@ -139,6 +149,7 @@ public class BookingCTL {
 	public CreditCard getCard(CreditCardType type, int number, int ccv){
 	    return new CreditCard(type, number, ccv);
     }
+
 
     //added for testing so CreditAuthorizer can be mocked
     public CreditAuthorizer getCreditAuthorizer(){
