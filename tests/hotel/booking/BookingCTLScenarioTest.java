@@ -86,7 +86,7 @@ public class BookingCTLScenarioTest {
     @Test
     void testNewBookInNotRegistered() {
         //arrange
-        phoneNum = 2;
+        phoneNum = 1;
         bookingCTL.bookingUI = mBookingUI;
         roomType = RoomType.SINGLE;
 
@@ -99,6 +99,27 @@ public class BookingCTLScenarioTest {
 
         //assert
         verify(mBookingUI, times(5)).setState(any());
+        verify(mBookingUI).displayGuestDetails(anyString(), anyString(), anyInt());
+        verify(mBookingUI).displayBookingDetails(anyString(), any(Date.class), anyInt(), anyDouble());
+        verify(mBookingUI).displayConfirmedBooking(anyString(), anyInt(),any(Date.class),
+                anyInt(), anyString(), anyString(), anyInt(), anyDouble(), anyLong());
+    }
+
+    @Test
+    void testNewBookInIsRegistered() {
+        //arrange
+        phoneNum = 2;
+        bookingCTL.bookingUI = mBookingUI;
+        roomType = RoomType.SINGLE;
+
+        //act
+        bookingCTL.phoneNumberEntered(phoneNum);
+        bookingCTL.roomTypeAndOccupantsEntered(roomType, occupantNumber);
+        bookingCTL.bookingTimesEntered(arrivalDate, stayLength);
+        bookingCTL.creditDetailsEntered(creditCardType, cardNumber, ccv);
+
+        //assert
+        verify(mBookingUI, times(4)).setState(any());
         verify(mBookingUI).displayGuestDetails(anyString(), anyString(), anyInt());
         verify(mBookingUI).displayBookingDetails(anyString(), any(Date.class), anyInt(), anyDouble());
         verify(mBookingUI).displayConfirmedBooking(anyString(), anyInt(),any(Date.class),

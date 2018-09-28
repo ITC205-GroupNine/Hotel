@@ -32,7 +32,7 @@ public class HotelHelper {
 		hotel.addRoom(RoomType.DOUBLE, 201);
 		hotel.addRoom(RoomType.TWIN_SHARE, 301);
 		
-		Guest guest = new Guest("Fred", "Nurke", 2);
+		Guest guest = hotel.registerGuest("Fred", "Nurke", 2);
 		CreditCard card = new CreditCard(CreditCardType.VISA, 2, 2);
 		
 		Room room = hotel.findAvailableRoom(RoomType.TWIN_SHARE, date, 1);
