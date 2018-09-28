@@ -2,8 +2,6 @@ package hotel.booking;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import hotel.entities.*;
@@ -12,20 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.*;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.quality.Strictness;
 
 
 import hotel.credit.CreditAuthorizer;
 import hotel.credit.CreditCard;
 import hotel.credit.CreditCardType;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -37,23 +29,17 @@ public class BookingCTLIntegrationTest {
     @Mock Hotel mHotel;
     @Mock Room mRoom;
     @Mock Guest mGuest;
-    @Mock CreditCard mCard;
-    @Mock Booking mBooking;
     @Mock CreditAuthorizer mCreditAuthorizer;
     @Mock BookingUI mBookingUI;
     @Spy @InjectMocks BookingCTL bookingCTL = new BookingCTL(mHotel);
 
     Hotel hotel;
     Room room;
-    Booking booking;
     Guest guest;
     CreditCard card;
-    CreditAuthorizer creditAuthorizer;
-    RoomType roomType;
     Date arrivalDate;
     int stayLength;
     int occupantNumber;
-    SimpleDateFormat sdf;
     int roomId;
     long confirmationNumber;
     String roomDescription;
