@@ -8,6 +8,7 @@ import hotel.entities.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -16,6 +17,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -124,5 +127,23 @@ public class BookingCTLScenarioTest {
         verify(mBookingUI).displayBookingDetails(anyString(), any(Date.class), anyInt(), anyDouble());
         verify(mBookingUI).displayConfirmedBooking(anyString(), anyInt(),any(Date.class),
                 anyInt(), anyString(), anyString(), anyInt(), anyDouble(), anyLong());
+    }
+
+    @Test
+    void testNewBookInIsRegisteredUnsuitableNumOfOccupants() {
+        //arrange
+        phoneNum = 2;
+        occupantNumber = 10;
+        bookingCTL.bookingUI = mBookingUI;
+        roomType = RoomType.SINGLE;
+
+        //act
+        bookingCTL.phoneNumberEntered(phoneNum);
+        bookingCTL.roomTypeAndOccupantsEntered(roomType, occupantNumber);
+
+        //assert
+        verify(mBookingUI, times(1)).setState(any());
+        verify(mBookingUI).displayGuestDetails(anyString(), anyString(), anyInt());
+        verify(mBookingUI).displayMessage(anyString());
     }
 }
