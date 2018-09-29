@@ -81,6 +81,7 @@ public class CheckinCTL {
         }
         if(confirmed){
             state = State.COMPLETED;
+            hotel.checkin(confirmationNumber);
             checkInUI.setState(CheckinUI.State.COMPLETED);
             completed();
         } else {
