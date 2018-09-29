@@ -66,11 +66,22 @@ class BookingTestIntegration {
         //act
         testBooking.checkIn();
 
-
         //assert
-
         assertTrue(testBooking.isCheckedIn());
         assertTrue(testRoom.isOccupied());
+    }
+
+    @Test
+    void testCheckInThrowsExceptionWithRealRoom() {
+        //arrange
+        testBooking.checkIn();
+        assertFalse(testBooking.isPending());
+        //act
+        Executable e = () -> testBooking.checkIn();
+
+        //assert
+        Throwable R = assertThrows(RuntimeException.class,e);
+        assertEquals("Booking Entity cannot call checkIn except in PENDING State",R.getMessage());
     }
 
 
