@@ -113,7 +113,7 @@ class BookingTestIntegration {
         //arrange
         assertFalse(testBooking.isCheckedIn());
         testServiceType = ServiceType.BAR_FRIDGE;
-        testCost = 20.00;
+        testCost = 21.00;
 
         //act
         Executable e = () -> testBooking.addServiceCharge(testServiceType,testCost);
@@ -122,6 +122,39 @@ class BookingTestIntegration {
         //assert
         assertEquals("Booking Entity charges cannot be added except in CHECKED_IN state",R.getMessage());
 
+    }
+
+    @Test
+    void checkOutIdealUseCaseWithRealRoom() {
+        //arrange
+        testRoom.bookings.add(testBooking);
+        testBooking.checkIn();
+        assertTrue(testBooking.isCheckedIn());
+        assertTrue(testRoom.isOccupied());
+
+        //act
+        testBooking.checkOut();
+
+        //assert
+        assertTrue(testBooking.isCheckedOut());
+        assertEquals(0,testRoom.bookings.size());
+        assertTrue(testRoom.isReady());
+
+
+    }
+
+    //I do not think this is required - doesn't make it to the point where it uses a real room item
+    @Test
+    void checkOutThrowsExceptionWithRealRoom() {
+        //arrange
+        assertFalse(testBooking.isCheckedIn());
+
+        //act
+        Executable e = () -> testBooking.checkOut();
+        Throwable R = assertThrows(RuntimeException.class,e);
+
+        //assert
+        assertEquals("Booking Entity charges cannot be added except in CHECKED_IN state",R.getMessage());
     }
 
 
