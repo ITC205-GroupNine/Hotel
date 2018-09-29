@@ -1,12 +1,9 @@
 package hotel.entities;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+
 import static org.mockito.Mockito.verify;
 
-
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +12,6 @@ import org.junit.jupiter.api.function.Executable;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito.*;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -23,7 +19,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import hotel.credit.CreditCard;
@@ -65,7 +60,7 @@ class BookingTest {
         testBooking.checkIn();
 
         //assert
-        verify(testRoom).checkin();
+        verify(testRoom).checkIn();
         assertTrue(testBooking.isCheckedIn());
     }
 
@@ -75,7 +70,7 @@ class BookingTest {
 
         //act
         testBooking.checkIn();
-        verify(testRoom).checkin();
+        verify(testRoom).checkIn();
 
         //assert
         assertTrue(testBooking.isCheckedIn());
@@ -125,7 +120,7 @@ class BookingTest {
 
         //act
         testBooking.checkOut();
-        verify(testRoom).checkout(testBooking);
+        verify(testRoom).checkOut(testBooking);
 
 
         //assert
