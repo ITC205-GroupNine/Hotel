@@ -16,14 +16,14 @@ public class CheckoutCTL {
     
     private static boolean approval;
     
-    enum State {ROOM, ACCEPT, CREDIT, CANCELLED, COMPLETED}
+    public enum State {ROOM, ACCEPT, CREDIT, CANCELLED, COMPLETED}
     
     private Hotel hotel;
-    State state;
+    public State state;
     private CheckoutUI checkoutUi;
     private double total;
     private int roomId;
-    CreditCard card;
+    public CreditCard card;
     
     public CheckoutCTL(Hotel hotel) {
         this.hotel = hotel;
@@ -98,7 +98,7 @@ public class CheckoutCTL {
     
     
     //added for testing so CreditCard can be mocked
-    public CreditCard getCard(CreditCardType type, int number, int ccv){
+    public static CreditCard getCard(CreditCardType type, int number, int ccv){
         return new CreditCard(type, number, ccv);
     }
     
@@ -107,12 +107,13 @@ public class CheckoutCTL {
         return CreditAuthorizer.getInstance();
     }
     //created for testing creditDetailsEnteredNotApproved
+    
     static boolean getApproval(){
         return approval = false;
     }
     
     
-    void creditDetailsEntered(CreditCardType type, int number, int ccv) {
+    public void creditDetailsEntered(CreditCardType type, int number, int ccv) {
         
         if (state == State.CREDIT) {
             CreditCard card = new CreditCard(type, number, ccv);
