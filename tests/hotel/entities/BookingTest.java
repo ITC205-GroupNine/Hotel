@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 
 
 import org.junit.BeforeClass;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +29,13 @@ import java.util.List;
 
 import hotel.credit.CreditCard;
 import hotel.credit.CreditCardType;
-
+//John Galvin 11330960
 @ExtendWith(MockitoExtension.class)
 class BookingTest {
 
     @Mock Guest testGuest = new Guest("John","20 Pelican Street",04);
     @Mock Room testRoom = new Room(1,RoomType.SINGLE);
+
     SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     Date testArrivalDate = format.parse("13-11-2018");
     int testStayLength = 3;
@@ -65,7 +67,7 @@ class BookingTest {
         testBooking.checkIn();
 
         //assert
-        verify(testRoom).checkin();
+        verify(testRoom).checkIn();
         assertTrue(testBooking.isCheckedIn());
     }
 
@@ -75,7 +77,7 @@ class BookingTest {
 
         //act
         testBooking.checkIn();
-        verify(testRoom).checkin();
+        verify(testRoom).checkIn();
 
         //assert
         assertTrue(testBooking.isCheckedIn());
@@ -125,7 +127,7 @@ class BookingTest {
 
         //act
         testBooking.checkOut();
-        verify(testRoom).checkout(testBooking);
+        verify(testRoom).checkOut(testBooking);
 
 
         //assert
