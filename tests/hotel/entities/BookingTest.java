@@ -93,7 +93,7 @@ class BookingTest {
         testServiceType = ServiceType.BAR_FRIDGE;
         testCost = 20.00;
 
-        //act
+        //act test comment
         testBooking.addServiceCharge(testServiceType,testCost);
 
         //assert
