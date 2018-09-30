@@ -38,8 +38,13 @@ public class HotelHelper {
 		Room room = hotel.findAvailableRoom(RoomType.TWIN_SHARE, date, 1);
 		long confNo = hotel.book(room, guest, date, 1, 2, card);
 		Booking booking = hotel.findBookingByConfirmationNumber(confNo);
-		hotel.checkin(confNo);
-		booking.addServiceCharge(ServiceType.ROOM_SERVICE, 7.00);
+		System.out.println(confNo);
+		//hotel.checkin(confNo);
+		room.state = Room.State.OCCUPIED;
+		//hotel.checkout(301);
+
+
+		//booking.addServiceCharge(ServiceType.ROOM_SERVICE, 7.00);
 		
 		IOUtils.trace("HotelHelper");
 		for (RoomType rt : RoomType.values()) {
