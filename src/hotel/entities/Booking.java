@@ -19,8 +19,10 @@ public class Booking {
     int numberOfOccupants;
     long confirmationNumber;
     CreditCard creditCard;
-    private List<ServiceCharge> charges;
-    private State state;
+    List<ServiceCharge> charges;
+    State state;
+    //for testing
+    ServiceCharge newCharge;
 
 
     public Booking(Guest guest, Room room,
@@ -36,6 +38,9 @@ public class Booking {
         this.creditCard = creditCard;
         this.charges = new ArrayList<>();
         this.state = State.PENDING;
+
+
+
     }
 
 
@@ -134,7 +139,9 @@ public class Booking {
         if (!isCheckedIn()){
             throw new RuntimeException("Booking Entity charges cannot be added except in CHECKED_IN state");
         }
-        ServiceCharge newCharge = new ServiceCharge(serviceType,cost);
+        //ServiceCharge newCharge = new ServiceCharge(serviceType,cost);
+        //for testing
+        newCharge = new ServiceCharge(serviceType,cost);
         charges.add(newCharge);
 
     }
