@@ -9,7 +9,7 @@ import hotel.utils.IOUtils;
 
 public class Room {
     
-    private enum State {READY, OCCUPIED}
+    public enum State {READY, OCCUPIED}
     
     private int id;
     private RoomType roomType;
@@ -17,14 +17,24 @@ public class Room {
     private State state;
     
     
-    Room(int id, RoomType roomType) {
+    public Room(int id, RoomType roomType) {
         this.id = id;
         this.roomType = roomType;
         bookings = new ArrayList<>();
         state = State.READY;
     }
-    
-    
+
+    //added for testing
+    public State getState() {
+        return state;
+    }
+
+    //added for testing
+    public void setState(State state) {
+        this.state = state;
+    }
+
+
     public String toString() {
         return String.format("Room : %d, %s", id, roomType);
     }
@@ -72,6 +82,7 @@ public class Room {
         
         if (availability) {
             Booking booking = new Booking(guest, this, arrivalDate, stayLength, numberOfOccupants, creditCard);
+            bookings.add(booking);
             return booking;
         } else {
             return null;
