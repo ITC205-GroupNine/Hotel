@@ -12,8 +12,8 @@ public class CheckinCTL {
     enum State {CHECKING, CONFIRMING, CANCELLED, COMPLETED }
 
     private Hotel hotel;
-    private CheckinUI checkInUI;
-    private State state;
+    CheckinUI checkInUI;
+    State state;
     private Booking booking = null;
     private long confirmationNumber;
 
@@ -80,7 +80,9 @@ public class CheckinCTL {
             throw new RuntimeException("Check in is not ready to be confirmed.");
         }
         if(confirmed){
+
             state = State.COMPLETED;
+            hotel.checkin(confirmationNumber);
             checkInUI.setState(CheckinUI.State.COMPLETED);
             completed();
         } else {
@@ -98,6 +100,23 @@ public class CheckinCTL {
 
     public void completed() {
         checkInUI.displayMessage("Checking in completed");
+    }
+
+    //for testing
+    public void setState(State newState){
+        this.state = newState;
+    }
+
+    public State getState(){
+        return this.state;
+    }
+
+    public void setConfirmationNumber(Long confirmationNum){
+        this.confirmationNumber = confirmationNum;
+    }
+
+    public long getConfirmationNumber(){
+        return this.confirmationNumber;
     }
 
 }

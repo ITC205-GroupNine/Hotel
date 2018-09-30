@@ -13,8 +13,8 @@ public class Room {
     
     private int id;
     private RoomType roomType;
-    private List<Booking> bookings;
-    private State state;
+    public List<Booking> bookings;
+    public State state;
     
     
     public Room(int id, RoomType roomType) {
