@@ -15,9 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,7 +46,6 @@ public class CheckOutCTLIntegrationTest {
     void setUp() {
         //MockitoAnnotations.initMocks(this);
         
-        Calendar myCalendar = new GregorianCalendar(2018, 11, 11);
         creditCardType = CreditCardType.VISA;
         cardNumber = 5;
         ccv = 1;
@@ -102,11 +98,5 @@ public class CheckOutCTLIntegrationTest {
         
         //assert
         verify(mCheckoutUI).displayMessage("Credit has not been approved");
-    }
-    @Test
-    void creditDetailsEnteredAllReal(){
-    
-    
-    
     }
 }
