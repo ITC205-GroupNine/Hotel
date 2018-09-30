@@ -9,12 +9,12 @@ import hotel.utils.IOUtils;
 
 public class Room {
     
-    private enum State {READY, OCCUPIED}
+    public enum State {READY, OCCUPIED}
     
     private int id;
     private RoomType roomType;
-    private List<Booking> bookings;
-    private State state;
+    public List<Booking> bookings;
+    public State state;
     
     
     Room(int id, RoomType roomType) {
@@ -72,6 +72,7 @@ public class Room {
         
         if (availability) {
             Booking booking = new Booking(guest, this, arrivalDate, stayLength, numberOfOccupants, creditCard);
+            bookings.add(booking);
             return booking;
         } else {
             return null;
