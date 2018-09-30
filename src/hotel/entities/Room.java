@@ -1,20 +1,20 @@
 package hotel.entities;
 
+import hotel.credit.CreditCard;
+import hotel.utils.IOUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import hotel.credit.CreditCard;
-import hotel.utils.IOUtils;
-
 public class Room {
     
-    public enum State {READY, OCCUPIED}
+    private enum State {READY, OCCUPIED}
     
     private int id;
     private RoomType roomType;
-    public List<Booking> bookings;
-    public State state;
+    private List<Booking> bookings;
+    private State state;
     
     
     public Room(int id, RoomType roomType) {
@@ -23,18 +23,8 @@ public class Room {
         bookings = new ArrayList<>();
         state = State.READY;
     }
-
-    //added for testing
-    public State getState() {
-        return state;
-    }
-
-    //added for testing
-    public void setState(State state) {
-        this.state = state;
-    }
-
-
+    
+    
     public String toString() {
         return String.format("Room : %d, %s", id, roomType);
     }
@@ -69,8 +59,8 @@ public class Room {
     public boolean isReady() {
         return state == State.READY;
     }
-
-
+    
+    
     boolean isOccupied(){
         return state == State.OCCUPIED;
     }
@@ -107,7 +97,7 @@ public class Room {
         if(!bookings.contains(booking)) {
             throw new RuntimeException("Cannot check out of a Room that isn't associated with the Booking");
         }
-            bookings.remove(booking);
-            state = State.READY;
-        }
+        bookings.remove(booking);
+        state = State.READY;
     }
+}
