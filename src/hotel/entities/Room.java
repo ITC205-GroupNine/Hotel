@@ -1,11 +1,11 @@
 package hotel.entities;
 
+import hotel.credit.CreditCard;
+import hotel.utils.IOUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import hotel.credit.CreditCard;
-import hotel.utils.IOUtils;
 
 public class Room {
     
@@ -17,7 +17,7 @@ public class Room {
     private State state;
     
     
-    Room(int id, RoomType roomType) {
+    public Room(int id, RoomType roomType) {
         this.id = id;
         this.roomType = roomType;
         bookings = new ArrayList<>();
@@ -72,6 +72,7 @@ public class Room {
         
         if (availability) {
             Booking booking = new Booking(guest, this, arrivalDate, stayLength, numberOfOccupants, creditCard);
+            bookings.add(booking);
             return booking;
         } else {
             return null;

@@ -1,8 +1,5 @@
 package hotel.checkout;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
 import hotel.credit.CreditAuthorizer;
 import hotel.credit.CreditCard;
 import hotel.credit.CreditCardType;
@@ -12,18 +9,18 @@ import hotel.entities.Hotel;
 import hotel.entities.ServiceCharge;
 import hotel.utils.IOUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 public class CheckoutCTL {
     
-    private static boolean approval;
+    enum State {ROOM, ACCEPT, CREDIT, CANCELLED, COMPLETED}
     
-    public enum State {ROOM, ACCEPT, CREDIT, CANCELLED, COMPLETED}
-    
-    private Hotel hotel;
-    public State state;
-    private CheckoutUI checkoutUi;
-    private double total;
-    private int roomId;
-    public CreditCard card;
+    Hotel hotel;
+    State state;
+    CheckoutUI checkoutUi;
+    double cost;
+    int roomId;
     
     public CheckoutCTL(Hotel hotel) {
         this.hotel = hotel;
@@ -64,15 +61,15 @@ public class CheckoutCTL {
             
             sb.append("Charges:\n");
             
-            total = 0;
+            cost = 0;
             List<ServiceCharge> charges = booking.getCharges();
             for (ServiceCharge sc : charges) {
-                total += sc.getCost();
+                cost += sc.getCost();
                 String chargeStr = String.format("    %-12s:%10s",
                         sc.getDescription(), String.format("$%.2f", sc.getCost()));
                 sb.append(chargeStr).append("\n");
             }
-            sb.append(String.format("Total: $%.2f\n", total));
+            sb.append(String.format("Total: $%.2f\n", cost));
             String msg = sb.toString();
             checkoutUi.displayMessage(msg);
             state = State.ACCEPT;
@@ -95,10 +92,17 @@ public class CheckoutCTL {
             checkoutUi.setState(CheckoutUI.State.CREDIT);
         }
     }
+    public CheckoutCTL.State getState() {
+        return state;
+    }
     
+    //added for testing
+    public void setState(CheckoutCTL.State state) {
+        this.state = state;
+    }
     
     //added for testing so CreditCard can be mocked
-    public static CreditCard getCard(CreditCardType type, int number, int ccv){
+    public CreditCard getCard(CreditCardType type, int number, int ccv){
         return new CreditCard(type, number, ccv);
     }
     
@@ -106,22 +110,17 @@ public class CheckoutCTL {
     public CreditAuthorizer getCreditAuthorizer(){
         return CreditAuthorizer.getInstance();
     }
-    //created for testing creditDetailsEnteredNotApproved
-    
-    static boolean getApproval(){
-        return approval = false;
-    }
     
     
-    public void creditDetailsEntered(CreditCardType type, int number, int ccv) {
+    void creditDetailsEntered(CreditCardType type, int number, int ccv) {
         
         if (state == State.CREDIT) {
-            CreditCard card = new CreditCard(type, number, ccv);
-            CreditAuthorizer creditAuthorizer = new CreditAuthorizer();
-            approval = creditAuthorizer.authorize(card, total);
+            CreditCard creditCard = getCard(type, number, ccv);
+            CreditAuthorizer creditAuthorizer = getCreditAuthorizer();
+            boolean approval = creditAuthorizer.authorize(creditCard, cost);
             if (approval) {
                 this.hotel.checkout(roomId);
-                checkoutUi.displayMessage("$" + total + " has been debited from your card");
+                checkoutUi.displayMessage("$" + cost + " has been debited from your card");
                 state = State.COMPLETED;
                 checkoutUi.setState(CheckoutUI.State.COMPLETED);
             } else {

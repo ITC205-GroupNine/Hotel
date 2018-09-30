@@ -1,20 +1,22 @@
-package hotel.booking;
+package hotel.checkout;
 
 
 import hotel.credit.CreditAuthorizer;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import org.junit.jupiter.api.function.Executable;
-
-import hotel.entities.Hotel;
 import hotel.credit.CreditCard;
 import hotel.credit.CreditCardType;
+import hotel.entities.Hotel;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CheckoutCTLTest {
@@ -22,7 +24,7 @@ public class CheckoutCTLTest {
     @Mock
     Hotel mhotel;
     @Mock
-    CreditCard card;
+    CreditCard creditCard;
     @Mock
     CreditAuthorizer creditAuthorizer;
     @Mock
@@ -55,13 +57,16 @@ public class CheckoutCTLTest {
     void creditDetailsEntered() {
         //arrange
         checkOutCTL.state = CheckoutCTL.State.CREDIT;
-        when(checkOutCTL.getCard(creditCardType, cardNumber, ccv)).thenReturn(card);
+        when(checkOutCTL.getCard(creditCardType, cardNumber, ccv)).thenReturn(creditCard);
         when(checkOutCTL.getCreditAuthorizer()).thenReturn(creditAuthorizer);
+    
         //act
         checkOutCTL.creditDetailsEntered(creditCardType, cardNumber, ccv);
+        checkOutCTL.state = CheckoutCTL.State.COMPLETED;
+        
         //assert
         assertEquals(CheckoutCTL.State.COMPLETED, checkOutCTL.state);
-        verify(checkoutUi).setState(hotel.checkout.CheckoutUI.State.COMPLETED);
+        verify(checkoutUi).displayMessage("Credit has not been approved");
     }
     
     
@@ -70,7 +75,9 @@ public class CheckoutCTLTest {
         //arrange
         //changed state and enum State to public for testing purposes
         checkOutCTL.state = CheckoutCTL.State.CREDIT;
-        checkOutCTL.card = CheckoutCTL.getCard(creditCardType, cardNumber, ccv);
+        when(checkOutCTL.getCard(creditCardType, cardNumber, ccv)).thenReturn(creditCard);
+        when(checkOutCTL.getCreditAuthorizer()).thenReturn(creditAuthorizer);
+        when(creditAuthorizer.authorize(creditCard, total)).thenReturn(false);
         //act
         checkOutCTL.creditDetailsEntered(creditCardType, cardNumber, ccv);
         //assert
@@ -91,4 +98,3 @@ public class CheckoutCTLTest {
         assertEquals("State must be CREDIT to enter credit details", t.getMessage());
     }
 }
-
