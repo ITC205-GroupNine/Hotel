@@ -17,14 +17,24 @@ public class Room {
     public State state;
     
     
-    Room(int id, RoomType roomType) {
+    public Room(int id, RoomType roomType) {
         this.id = id;
         this.roomType = roomType;
         bookings = new ArrayList<>();
         state = State.READY;
     }
-    
-    
+
+    //added for testing
+    public State getState() {
+        return state;
+    }
+
+    //added for testing
+    public void setState(State state) {
+        this.state = state;
+    }
+
+
     public String toString() {
         return String.format("Room : %d, %s", id, roomType);
     }

@@ -10,7 +10,7 @@ import hotel.utils.IOUtils;
 
 public class Booking {
 
-    private enum State {PENDING, CHECKED_IN, CHECKED_OUT}
+    public enum State {PENDING, CHECKED_IN, CHECKED_OUT}
 
     private Guest guest;
     private Room room;
@@ -43,6 +43,10 @@ public class Booking {
 
     }
 
+    //added for testing
+    public State getState() {
+        return state;
+    }
 
     private long generateConfirmationNumber(int roomId, Date arrivalDate) {
         Calendar calendar = Calendar.getInstance();
